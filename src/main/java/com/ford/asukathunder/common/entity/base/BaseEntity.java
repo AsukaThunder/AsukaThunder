@@ -110,8 +110,7 @@ public abstract class BaseEntity implements Serializable {
 
     @PreUpdate
     public void preUpdate() {
-        String userId = UserUtils.getUserId();
-        this.updateUser = userId;
+        this.updateUser = UserUtils.getUserId();
         if (isDelete == null) {
             setIsDelete(false);
         }

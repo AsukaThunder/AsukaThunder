@@ -1,6 +1,7 @@
 package com.ford.asukathunder.common.entity.user;
 
 import com.ford.asukathunder.common.entity.base.BaseEntity;
+import com.ford.asukathunder.common.entity.role.RoleCode;
 import com.ford.asukathunder.common.entity.role.UserRoleRef;
 import com.ford.asukathunder.common.util.SnowflakeIdWorker;
 import lombok.Getter;
@@ -36,19 +37,19 @@ public class User extends BaseEntity {
      * 用户ID
      */
     @Id
-    @Column(name = "user_id", length = 32, updatable = false, unique = true, columnDefinition = "comment '用户id'")
+    @Column(name = "user_id", length = 32, updatable = false, unique = true)
     private String userId;
 
     /**
-     * 用户名称
+     * 用户账号
      */
-    @Column(name = "user_name", length = 30, nullable = false, columnDefinition = "comment '用户账号'")
-    private String username;
+    @Column(name = "user_account", length = 30, nullable = false)
+    private String account;
 
     /**
      * 用户名称
      */
-    @Column(name = "nick_name", length = 50, nullable = false, columnDefinition = "comment '用户昵称'")
+    @Column(name = "nick_name", length = 50, nullable = false)
     private String nickname;
 
     /**
@@ -66,37 +67,37 @@ public class User extends BaseEntity {
     /**
      * 用户密码
      */
-    @Column(name = "password", length = 32, nullable = false, columnDefinition = "comment '登录密码'")
+    @Column(name = "password", length = 32, nullable = false)
     private String password;
 
     /**
      * 真实姓名
      */
-    @Column(name = "real_name", length = 30, columnDefinition = "comment '真实姓名'")
+    @Column(name = "real_name", length = 30)
     private String realName;
 
     /**
      * 性别
      */
-    @Column(name = "gender", columnDefinition = "comment '用户性别'")
+    @Column(name = "gender")
     private Integer gender;
 
     /**
      * 手机
      */
-    @Column(name = "mobile_phone", length = 20, columnDefinition = "comment '手机号码'")
+    @Column(name = "mobile_phone", length = 20)
     private String mobilePhone;
 
     /**
      * 邮箱
      */
-    @Column(name = "email", length = 50, columnDefinition = "comment '用户邮箱'")
+    @Column(name = "email", length = 50)
     private String email;
 
     /**
      * 是否启用
      */
-    @Column(name = "is_use", columnDefinition = "comment '是否启用'")
+    @Column(name = "is_use")
     private Boolean isUse;
 
     /**
@@ -112,10 +113,37 @@ public class User extends BaseEntity {
     private Date loginTime;
 
     /**
-     * version 2.0
+     * version 1.0
      * 用户角色关系
      */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
     private List<UserRoleRef> userRoleRef;
+
+    /**
+     * 是否超级管理员
+     */
+    @Transient
+    public Boolean isRoot() {
+        return this.isCurrentRole(RoleCode.ROOT.name());
+    }
+
+    /**
+     * 是否管理员
+     */
+    @Transient
+    public Boolean isAdmin() {
+        return this.isCurrentRole(RoleCode.ADMIN.name());
+    }
+
+    @Transient
+    private Boolean isCurrentRole(String roleCode) {
+        List<UserRoleRef> roleRefs = this.getUserRoleRef();
+        for (UserRoleRef ref : roleRefs) {
+            if (roleCode.equals(ref.getRole().getRoleCode())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

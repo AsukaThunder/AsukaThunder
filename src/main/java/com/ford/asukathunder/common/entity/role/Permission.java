@@ -20,12 +20,18 @@ import java.util.List;
 @DynamicUpdate
 public class Permission extends BaseEntity {
 
+    /**
+     * 权限类型
+     */
     public enum PlatformType {
         /**
-         * 权限类型
+         * 电脑端
          */
         PC("电脑端"),
 
+        /**
+         * 手机端
+         */
         MOBILE("手机端");
 
         private final String value;
@@ -40,14 +46,23 @@ public class Permission extends BaseEntity {
 
     }
 
+    /**
+     * 资源类型
+     */
     public enum ResourceType {
         /**
-         * 资源类型
+         * 菜单
          */
         MENU("菜单"),
 
+        /**
+         * 元素
+         */
         ELEMENT("元素"),
 
+        /**
+         * 数据
+         */
         DATA("数据");
 
         private final String value;
@@ -61,7 +76,9 @@ public class Permission extends BaseEntity {
         }
     }
 
-
+    /**
+     * 权限id
+     */
     @Id
     @Column(name = "permission_id", length = 32, updatable = false, unique = true)
     private String permissionId;
@@ -104,9 +121,15 @@ public class Permission extends BaseEntity {
     @Column(name = "resource_url")
     private String resourceUrl;
 
+    /**
+     * 展示排序
+     */
     @Column(name = "display_sort")
     private Integer displaySort;
 
+    /**
+     * 是否可用
+     */
     @Column(name = "enable", length = 1)
     private Boolean enable;
 
