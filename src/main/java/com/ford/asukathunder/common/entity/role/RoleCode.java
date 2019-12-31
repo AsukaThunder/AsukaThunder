@@ -17,7 +17,13 @@ public enum  RoleCode {
     /**
      * 管理员
      */
-    ADMIN("管理员");
+    ADMIN("管理员"),
+
+    /**
+     * 用户
+     */
+    USER("用户");
+
 
     private String value;
 

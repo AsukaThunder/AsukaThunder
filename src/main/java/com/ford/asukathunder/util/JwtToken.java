@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 /**
+ * JWT生成token密钥
  * @ClassName: JwtToken
  * @author: Ford.Zhang
  * @version: 1.0
