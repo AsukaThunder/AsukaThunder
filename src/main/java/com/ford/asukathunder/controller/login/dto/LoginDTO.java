@@ -16,6 +16,9 @@ public class LoginDTO {
      */
     private String password;
 
+    /**
+     * 是否手机端
+     */
     private boolean fromMobile = false;
 
     public String getAccount() {

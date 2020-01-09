@@ -53,6 +53,24 @@ public class User extends BaseEntity {
     private String nickname;
 
     /**
+     * 出生日期
+     */
+    @Column(name = "birthday", columnDefinition = "date comment '出生日期'")
+    private Date birthday;
+
+    /**
+     * 用户年龄
+     */
+    @Column(name = "age", columnDefinition = "int(5) comment '年龄'")
+    private Integer age;
+
+    /**
+     * 用户星座
+     */
+    @Column(name = "constellation", columnDefinition = "varchar(10) comment '星座'")
+    private String constellation;
+
+    /**
      * 用户头像
      */
     @Column(name = "avatar", columnDefinition = "varchar(100) comment '头像地址'")
