@@ -113,6 +113,12 @@ public class User extends BaseEntity {
     private String email;
 
     /**
+     * 格言
+     */
+    @Column(name = "motto", columnDefinition = "varchar(500) comment '格言'")
+    private String motto;
+
+    /**
      * 是否启用
      */
     @Column(name = "is_use")

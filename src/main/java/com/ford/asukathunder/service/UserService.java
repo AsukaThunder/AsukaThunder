@@ -40,11 +40,11 @@ public interface UserService {
     /**
      * 查询用户列表
      *
-     * @param realName 用户姓名
+     * @param nickName 昵称
      * @param pageable 分页
      * @return Page<User>
      */
-    Page<User> queryUsers(String realName, String account, String roleId, Pageable pageable);
+    Page<User> queryUsers(String nickName, String account, String roleId, Pageable pageable);
 
     /**
      * 用户名是否重复

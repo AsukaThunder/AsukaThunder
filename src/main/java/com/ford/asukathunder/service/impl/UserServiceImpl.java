@@ -48,11 +48,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> queryUsers(String realName, String account, String roleId, Pageable pageable) {
+    public Page<User> queryUsers(String nickName, String account, String roleId, Pageable pageable) {
         Specification<User> spec = (root, criteriaQuery, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
-            if (StringUtils.isNotEmpty(realName)) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("realName").as(String.class), "%" + realName + "%"));
+            if (StringUtils.isNotEmpty(nickName)) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("nickName").as(String.class), "%" + nickName + "%"));
             }
             if (StringUtils.isNotEmpty(account)) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("account").as(String.class), "%" + account + "%"));

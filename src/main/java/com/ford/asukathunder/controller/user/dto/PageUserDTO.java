@@ -10,8 +10,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author sam at 2019-04-26 16:52
- */
+ * 用户展示详情信息
+ * @ClassName: PageUserDTO
+ * @author: Ford.Zhang
+ * @version: 1.0
+ * 2019/12/27 下午 1:49
+ **/
 @Getter
 @Setter
 public class PageUserDTO {
@@ -68,6 +72,14 @@ public class PageUserDTO {
      * 邮箱
      */
     private String email;
+    /**
+     *格言
+     */
+    private String motto;
+    /**
+     *登录IP
+     */
+    private String loginIp;
 
     public User convertTo() {
         PageUserConverter converter = new PageUserConverter();
@@ -101,6 +113,8 @@ public class PageUserDTO {
             dto.setAge(user.getAge());
             dto.setBirthday(user.getBirthday());
             dto.setConstellation(user.getConstellation());
+            dto.setMotto(user.getMotto());
+            dto.setLoginIp(user.getLoginIp());
             dto.setRoles(user.getUserRoleRef()
                     .stream()
                     .filter(ref -> ref.getRole().getEnable())

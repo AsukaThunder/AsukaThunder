@@ -26,7 +26,8 @@ import javax.annotation.Resource;
  * @version: 1.0
  * 2020/1/9 下午 5:47
  **/
-@RestController(value = "/user")
+@RestController
+@RequestMapping(value = "/user")
 public class UserController {
 
     @Resource
@@ -36,20 +37,25 @@ public class UserController {
     private UserRoleService userRoleService;
 
     /**
-     * 账号 姓名 角色
-     * @param realName 账号
+     * 查询用户列表
+     * @param nickName 真名
+     * @param account 账号
+     * @param roleId 角色id
+     * @param page 分页
+     * @param size 大小
+     * @return Page
      */
     @GetMapping(value = "/query", produces = "application/json")
     @ApiOperation("查询用户列表")
     @Encrypt
-    public Page<PageUserDTO> queryUsers(@RequestParam(value = "realName", required = false) String realName,
+    public Page<PageUserDTO> queryUsers(@RequestParam(value = "nickName", required = false) String nickName,
                                         @RequestParam(value = "account", required = false) String account,
                                         @RequestParam(value = "roleId", required = false) String roleId,
                                         @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                         @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
 
         PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createTime");
-        Page<User> users = userService.queryUsers(realName, account, roleId, pageRequest);
+        Page<User> users = userService.queryUsers(nickName, account, roleId, pageRequest);
         return users.map(user -> {
             PageUserDTO result = new PageUserDTO().convertFrom(user);
             return result;
@@ -62,7 +68,7 @@ public class UserController {
      * 3.管理员可以修改非管理员用户的角色和停用启用状态
      * 4.管理员不可以修改自己的角色和停用启用状态
      */
-    @GetMapping(value = "/v1/users/{userId}", produces = "application/json")
+    @GetMapping(value = "/detail", produces = "application/json")
     @ApiOperation("查询指定用户详情")
     @Encrypt
     public DetailUserDTO queryUserById(@PathVariable("userId") String userId) {
@@ -75,16 +81,14 @@ public class UserController {
         return result;
     }
 
-    @PostMapping(value = "/v1/users", produces = "application/json")
+    @PostMapping(value = "/add", produces = "application/json")
     @ApiOperation("新建用户")
     public void addUser(@Validated @RequestBody SaveUserDTO dto) {
         User user = dto.convertTo();
-
         // 校验用户名重复
         if (userService.isAccountDuplicate(dto.getAccount())) {
             throw new UnprocessableEntityException(ErrorCode.UsernameDuplicate);
         }
-
         // 校验手机号重复
         if (userService.isPhoneDuplicate(dto.getMobilePhone())) {
             throw new UnprocessableEntityException(ErrorCode.MobilePhoneDuplicate);
