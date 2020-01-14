@@ -5,6 +5,7 @@ import com.google.common.base.Converter;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,9 +23,20 @@ public class DetailUserDTO {
 
     private String account;
 
+    private String nickName;
+
     private String realName;
 
     private String mobilePhone;
+
+    /**
+     * 出生日期
+     */
+    private Date birthday;
+    /**
+     * 头像
+     */
+    private String avatar;
 
     private Boolean isUse;
 
@@ -64,6 +76,9 @@ public class DetailUserDTO {
             DetailUserDTO dto = new DetailUserDTO();
             dto.setUserId(user.getUserId());
             dto.setAccount(user.getAccount());
+            dto.setNickName(user.getNickname());
+            dto.setBirthday(user.getBirthday());
+            dto.setAvatar(user.getAvatar());
             dto.setMobilePhone(user.getMobilePhone());
             dto.setRealName(user.getRealName());
             dto.setIsUse(user.getIsUse());

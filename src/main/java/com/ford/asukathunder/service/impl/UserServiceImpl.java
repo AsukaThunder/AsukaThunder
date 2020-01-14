@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         Specification<User> spec = (root, criteriaQuery, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
             if (StringUtils.isNotEmpty(nickName)) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("nickName").as(String.class), "%" + nickName + "%"));
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("nickname").as(String.class), "%" + nickName + "%"));
             }
             if (StringUtils.isNotEmpty(account)) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("account").as(String.class), "%" + account + "%"));
@@ -99,6 +99,9 @@ public class UserServiceImpl implements UserService {
     public void update(User dbUser, User inputUser) {
         dbUser.setNickname(inputUser.getNickname());
         dbUser.setAvatar(inputUser.getAvatar());
+        dbUser.setBirthday(inputUser.getBirthday());
+        dbUser.setAge(inputUser.getAge());
+        dbUser.setConstellation(inputUser.getConstellation());
         dbUser.setRealName(inputUser.getRealName());
         dbUser.setEmail(inputUser.getEmail());
         dbUser.setGender(inputUser.getGender());
@@ -116,13 +119,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean isAccountDuplicate(String account, String userId) {
-        User user = userRepository.findByAccountAndUserId(account, userId);
+        User user = userRepository.findByAccountAndUserIdNot(account, userId);
         return null != user;
     }
 
     @Override
     public Boolean isPhoneDuplicate(String phone, String userId) {
-        User user = userRepository.findByMobilePhoneAndUserId(phone,userId);
+        User user = userRepository.findByMobilePhoneAndUserIdNot(phone,userId);
         return null != user;
     }
 
@@ -183,8 +186,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(User dbUser) {
-        dbUser.setIsDelete(true);
-        userRepository.save(dbUser);
+        //软删除
+//        dbUser.setIsDelete(true);
+//        userRepository.save(dbUser);
+        //硬删除
+        userRepository.delete(dbUser);
     }
 
     @Override
@@ -201,4 +207,5 @@ public class UserServiceImpl implements UserService {
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
+
 }

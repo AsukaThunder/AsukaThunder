@@ -23,6 +23,7 @@ import java.util.List;
  * 2019/12/27 下午 1:56
  **/
 @Service
+@Transactional
 public class PermissionServiceImpl implements PermissionService {
 
     @Resource
@@ -132,6 +133,6 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public Permission findByCode(String permissionCode, String permissionId) {
-        return permissionRepository.findByPermissionCodeAndPermissionId(permissionCode, permissionId);
+        return permissionRepository.findByPermissionCodeAndPermissionIdNot(permissionCode, permissionId);
     }
 }

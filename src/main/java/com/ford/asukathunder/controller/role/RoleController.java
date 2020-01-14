@@ -79,7 +79,7 @@ public class RoleController {
      * 新增一个角色
      */
     @ApiOperation(value = "新增一个角色", produces = "application/json;charset=UTF-8")
-    @PostMapping(value = "/v1/roles")
+    @PostMapping(value = "/v1/roles", params = "action=create")
     @ResponseStatus(HttpStatus.CREATED)
     public void addRole(@Validated @RequestBody SaveRoleDTO roleDTO) {
         Role addRole = roleDTO.convertTo();

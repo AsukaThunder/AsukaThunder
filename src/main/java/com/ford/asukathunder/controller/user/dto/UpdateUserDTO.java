@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +28,9 @@ public class UpdateUserDTO {
     @NotNull(message = "用户名不能为空")
     private String account;
 
+    @NotNull(message = "昵称不能为空")
+    private String nickName;
+
     @NotNull(message = "真实姓名不能为空")
     private String realName;
 
@@ -34,6 +38,23 @@ public class UpdateUserDTO {
     private String mobilePhone;
 
     private Boolean isUse;
+
+    /**
+     * 出生日期
+     */
+    private Date birthday;
+    /**
+     * 头像
+     */
+    private String avatar;
+    /**
+     * 年龄
+     */
+    private Integer age;
+    /**
+     * 星座
+     */
+    private String constellation;
 
     private Integer gender;
 
@@ -57,7 +78,14 @@ public class UpdateUserDTO {
         protected User doForward(UpdateUserDTO dto) {
             User user = new User();
             user.setUserId(dto.getUserId());
+            user.setNickname(dto.getNickName());
+            user.setBirthday(dto.getBirthday());
+            if (dto.getBirthday() != null) {
+                user.setAge(SaveUserDTO.getAgeByBirthDay(dto.getBirthday()));
+                user.setConstellation(SaveUserDTO.getConstellation(dto.getBirthday()));
+            }
             user.setRealName(dto.getRealName());
+            user.setAvatar(dto.getAvatar());
             user.setAccount(dto.getAccount());
             user.setMobilePhone(dto.getMobilePhone());
             user.setRealName(dto.getRealName());

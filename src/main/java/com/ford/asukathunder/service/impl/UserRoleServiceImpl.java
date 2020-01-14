@@ -4,6 +4,7 @@ import com.ford.asukathunder.common.entity.role.UserRoleRef;
 import com.ford.asukathunder.repository.UserRoleRefRepository;
 import com.ford.asukathunder.service.UserRoleService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
  * 2020/1/9 下午 5:50
  **/
 @Service
+@Transactional
 public class UserRoleServiceImpl implements UserRoleService {
 
     @Resource

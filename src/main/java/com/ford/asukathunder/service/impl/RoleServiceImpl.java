@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -30,6 +31,7 @@ import java.util.List;
  * 2020/1/9 下午 5:20
  **/
 @Service
+@Transactional
 public class RoleServiceImpl implements RoleService {
 
     @Resource

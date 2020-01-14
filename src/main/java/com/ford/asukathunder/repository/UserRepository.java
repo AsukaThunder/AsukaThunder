@@ -34,7 +34,7 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
      * @param userId id
      * @return user
      */
-    User findByAccountAndUserId(String account, String userId);
+    User findByAccountAndUserIdNot(String account, String userId);
 
     /**
      * 根据手机号查询
@@ -49,7 +49,7 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
      * @param userId id
      * @return user
      */
-    User findByMobilePhoneAndUserId(String mobilePhone, String userId);
+    User findByMobilePhoneAndUserIdNot(String mobilePhone, String userId);
 
     /**
      * 根据id查询

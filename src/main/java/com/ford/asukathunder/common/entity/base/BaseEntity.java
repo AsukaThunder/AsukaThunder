@@ -59,25 +59,6 @@ public abstract class BaseEntity implements Serializable {
     private String updateUser;
 
     /**
-     * 删除者
-     */
-    @Column(name = "delete_user", columnDefinition = "varchar(64) comment '删除者'")
-    private String deleteBy;
-
-    /**
-     * 删除时间
-     */
-    @Column(name = "delete_time", columnDefinition = "varchar(64) comment '删除时间'")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date deleteTime;
-
-    /**
-     * 备注
-     */
-    @Column(name = "remark", columnDefinition = "varchar(500) comment'备注'")
-    private String remark;
-
-    /**
      * 是否删除 0-未删除 1-已删除
      */
     @Column(name = "is_delete", columnDefinition = "char(1) comment'是否删除（0正常 1已删除）'")

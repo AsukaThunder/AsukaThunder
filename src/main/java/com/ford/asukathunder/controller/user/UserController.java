@@ -7,7 +7,6 @@ import com.ford.asukathunder.common.exception.ResourceNotFoundException;
 import com.ford.asukathunder.common.exception.UnprocessableEntityException;
 import com.ford.asukathunder.common.util.UserUtils;
 import com.ford.asukathunder.controller.user.dto.*;
-import com.ford.asukathunder.service.UserRoleService;
 import com.ford.asukathunder.service.UserService;
 import com.ford.asukathunder.util.CheckoutUtil;
 import com.ford.asukathunder.util.ErrorCode;
@@ -27,14 +26,10 @@ import javax.annotation.Resource;
  * 2020/1/9 下午 5:47
  **/
 @RestController
-@RequestMapping(value = "/user")
 public class UserController {
 
     @Resource
     private UserService userService;
-
-    @Resource
-    private UserRoleService userRoleService;
 
     /**
      * 查询用户列表
@@ -45,7 +40,7 @@ public class UserController {
      * @param size 大小
      * @return Page
      */
-    @GetMapping(value = "/query", produces = "application/json")
+    @GetMapping(value = "/v1/users", produces = "application/json")
     @ApiOperation("查询用户列表")
     @Encrypt
     public Page<PageUserDTO> queryUsers(@RequestParam(value = "nickName", required = false) String nickName,
@@ -68,7 +63,7 @@ public class UserController {
      * 3.管理员可以修改非管理员用户的角色和停用启用状态
      * 4.管理员不可以修改自己的角色和停用启用状态
      */
-    @GetMapping(value = "/detail", produces = "application/json")
+    @GetMapping(value = "/v1/users/{userId}", produces = "application/json")
     @ApiOperation("查询指定用户详情")
     @Encrypt
     public DetailUserDTO queryUserById(@PathVariable("userId") String userId) {
@@ -81,13 +76,13 @@ public class UserController {
         return result;
     }
 
-    @PostMapping(value = "/add", produces = "application/json")
+    @PostMapping(value = "/v1/users", produces = "application/json")
     @ApiOperation("新建用户")
     public void addUser(@Validated @RequestBody SaveUserDTO dto) {
         User user = dto.convertTo();
         // 校验用户名重复
         if (userService.isAccountDuplicate(dto.getAccount())) {
-            throw new UnprocessableEntityException(ErrorCode.UsernameDuplicate);
+            throw new UnprocessableEntityException(ErrorCode.AccountDuplicate);
         }
         // 校验手机号重复
         if (userService.isPhoneDuplicate(dto.getMobilePhone())) {
@@ -108,14 +103,13 @@ public class UserController {
 
         // 校验用户名重复
         if (userService.isAccountDuplicate(dto.getAccount(), dto.getUserId())) {
-            throw new UnprocessableEntityException(ErrorCode.UsernameDuplicate);
+            throw new UnprocessableEntityException(ErrorCode.AccountDuplicate);
         }
 
         // 校验手机号重复
         if (userService.isPhoneDuplicate(dto.getMobilePhone(), dto.getUserId())) {
             throw new UnprocessableEntityException(ErrorCode.MobilePhoneDuplicate);
         }
-
 
         userService.update(dbUser, inputUser);
     }

@@ -26,7 +26,7 @@ public interface PermissionRepository extends JpaRepository<Permission,String>, 
      * @param permissionId 权限id
      * @return 权限
      */
-    Permission findByPermissionCodeAndPermissionId(String permissionCode, String permissionId);
+    Permission findByPermissionCodeAndPermissionIdNot(String permissionCode, String permissionId);
 
     /**
      * 查找最高权限

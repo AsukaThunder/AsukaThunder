@@ -31,7 +31,7 @@ public enum ErrorCode {
     TokenInvalid(401, "TokenInvalid", "Token非法，请重新登录"),
     CodeNotFound(1001, "CodeNotFound", "Code不存在"),
     CodeTodayEmpty(1002, "CodeTodayEmpty", "查询Code时传入的today为空"),
-    UsernameDuplicate(1004, "UserNameDuplicate", "用户账号重复"),
+    AccountDuplicate(1004, "AccountDuplicate", "用户账号重复"),
     MobilePhoneDuplicate(1005, "MobilePhoneDuplicate", "手机号码重复"),
     PasswordRepeatDifferent(1006, "PasswordRepeatDifferent", "两次密码输入不一致"),
     CannotModifyOtherPwd(1007, "CannotModifyOtherPwd", "无法修改他人密码"),
