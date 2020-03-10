@@ -38,6 +38,8 @@ public class DetailUserDTO {
      */
     private String avatar;
 
+    private String motto;
+
     private Boolean isUse;
 
     private Integer gender;
@@ -82,6 +84,7 @@ public class DetailUserDTO {
             dto.setMobilePhone(user.getMobilePhone());
             dto.setRealName(user.getRealName());
             dto.setIsUse(user.getIsUse());
+            dto.setMotto(user.getMotto());
             dto.setEmail(user.getEmail());
             dto.setGender(user.getGender());
             dto.setRoles(user.getUserRoleRef()

@@ -2,6 +2,8 @@ package com.ford.asukathunder.common.entity.role;
 
 import com.ford.asukathunder.common.entity.base.BaseEntity;
 import com.ford.asukathunder.common.util.SnowflakeIdWorker;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -17,6 +19,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "permission")
+@Getter
+@Setter
 @DynamicUpdate
 public class Permission extends BaseEntity {
 
@@ -149,118 +153,6 @@ public class Permission extends BaseEntity {
 
     @OneToMany(mappedBy = "permission", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RolePermissionRef> rolePermissionRef;
-
-    public Permission getParentPermission() {
-        return parentPermission;
-    }
-
-    public void setParentPermission(Permission parentPermission) {
-        this.parentPermission = parentPermission;
-    }
-
-    public List<Permission> getSonPermissions() {
-        return sonPermissions;
-    }
-
-    public void setSonPermissions(List<Permission> sonPermissions) {
-        this.sonPermissions = sonPermissions;
-    }
-
-    public List<RolePermissionRef> getRolePermissionRef() {
-        return rolePermissionRef;
-    }
-
-    public void setRolePermissionRef(List<RolePermissionRef> rolePermissionRef) {
-        this.rolePermissionRef = rolePermissionRef;
-    }
-
-    public Permission() {
-    }
-
-    public Permission(String permissionId) {
-        this.permissionId = permissionId;
-    }
-
-    public String getPermissionId() {
-        return permissionId;
-    }
-
-    public void setPermissionId(String permissionId) {
-        this.permissionId = permissionId;
-    }
-
-    public String getPermissionCode() {
-        return permissionCode;
-    }
-
-    public void setPermissionCode(String permissionCode) {
-        this.permissionCode = permissionCode;
-    }
-
-    public String getPermissionName() {
-        return permissionName;
-    }
-
-    public void setPermissionName(String permissionName) {
-        this.permissionName = permissionName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public PlatformType getPlatform() {
-        return platform;
-    }
-
-    public void setPlatform(PlatformType platform) {
-        this.platform = platform;
-    }
-
-
-    public ResourceType getResourceType() {
-        return resourceType;
-    }
-
-    public void setResourceType(ResourceType resourceType) {
-        this.resourceType = resourceType;
-    }
-
-    public String getResourceUrl() {
-        return resourceUrl;
-    }
-
-    public void setResourceUrl(String resourceUrl) {
-        this.resourceUrl = resourceUrl;
-    }
-
-    public Integer getDisplaySort() {
-        return displaySort;
-    }
-
-    public void setDisplaySort(Integer displaySort) {
-        this.displaySort = displaySort;
-    }
-
-    public Boolean getEnable() {
-        return enable;
-    }
-
-    public void setEnable(Boolean enable) {
-        this.enable = enable;
-    }
-
-    public Boolean getCanDelete() {
-        return canDelete;
-    }
-
-    public void setCanDelete(Boolean canDelete) {
-        this.canDelete = canDelete;
-    }
 
     @Override
     public void setEntityId(SnowflakeIdWorker snowflakeIdWorker) {

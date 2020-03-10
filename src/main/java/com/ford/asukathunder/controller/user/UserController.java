@@ -114,6 +114,24 @@ public class UserController {
         userService.update(dbUser, inputUser);
     }
 
+    @PutMapping(value = "/v1/users/{userId}", params = "action=personal",produces = "application/json")
+    @ApiOperation("个人中心修改用户")
+    public void updatePersonal(@Validated @RequestBody UpdatePersonalUserDTO dto) {
+        User dbUser = userService.queryById(dto.getUserId());
+        if (null == dbUser) {
+            throw new ResourceNotFoundException(ErrorCode.UserNotFoundException);
+        }
+
+        User inputUser = dto.convertTo();
+
+        // 校验手机号重复
+        if (userService.isPhoneDuplicate(dto.getMobilePhone(), dto.getUserId())) {
+            throw new UnprocessableEntityException(ErrorCode.MobilePhoneDuplicate);
+        }
+
+        userService.update(dbUser, inputUser);
+    }
+
     @DeleteMapping(value = "/v1/users/{userId}", produces = "application/json")
     @ApiOperation("删除-软删除")
     public void delete(@PathVariable("userId") String userId) {

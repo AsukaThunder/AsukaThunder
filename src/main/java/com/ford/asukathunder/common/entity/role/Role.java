@@ -62,7 +62,7 @@ public class Role extends BaseEntity {
     private List<RolePermissionRef> rolePermissionRef;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role", orphanRemoval = true)
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRoleRef> userRoleRef;
 
 

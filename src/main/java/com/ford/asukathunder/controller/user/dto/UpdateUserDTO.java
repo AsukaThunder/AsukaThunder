@@ -31,7 +31,6 @@ public class UpdateUserDTO {
     @NotNull(message = "昵称不能为空")
     private String nickName;
 
-    @NotNull(message = "真实姓名不能为空")
     private String realName;
 
     @NotNull(message = "手机号不能为空")
