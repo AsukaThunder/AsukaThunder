@@ -1,6 +1,8 @@
 package com.ford.asukathunder.service;
 
+import com.ford.asukathunder.common.config.PageResult;
 import com.ford.asukathunder.common.entity.user.User;
+import com.ford.asukathunder.controller.user.dto.PageUserDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,7 +20,7 @@ public interface UserService {
      * 根据用户名密码查询
      * @param account 用户账号
      * @param password 密码
-     * @return User
+     * @return User1
      */
     User queryByAccountAndPassword(String account, String password);
 
@@ -42,10 +44,20 @@ public interface UserService {
      *
      * @param nickName 昵称
      * @param pageable 分页
-     * @return Page<User>
+     * @return Page<User1>
      */
     Page<User> queryUsers(String nickName, String account, String roleId, Pageable pageable);
 
+    /**
+     * 查询用户列表
+     * @param nickName 昵稱
+     * @param account 賬號
+     * @param roleId 角色
+     * @param page 页数
+     * @param size 大小
+     * @return pa
+     */
+    PageResult<PageUserDTO> query(String nickName, String account, String roleId, Integer page, Integer size);
     /**
      * 用户名是否重复
      *

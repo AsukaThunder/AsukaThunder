@@ -31,7 +31,7 @@ public class JsonUtils {
         try {
             return mapper.readValue(jsonString, entityClass);
         } catch (Exception e) {
-            throw new RuntimeException("JSON【" + jsonString + "】转对象时出错", e);
+            throw new RuntimeException("JSONFormat【" + jsonString + "】转对象时出错", e);
         }
     }
 

@@ -69,7 +69,7 @@ public class EncryptRequestBodyAdvice implements RequestBodyAdvice {
             this.headers = inputMessage.getHeaders();
             String content = IOUtils.toString(inputMessage.getBody(), charset);
             long startTime = System.currentTimeMillis();
-            // JSON 数据格式的不进行解密操作
+            // JSONFormat 数据格式的不进行解密操作
             String decryptBody = "";
             if (content.startsWith("{")) {
                 decryptBody = content;

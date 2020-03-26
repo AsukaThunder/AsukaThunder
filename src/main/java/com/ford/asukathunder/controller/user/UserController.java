@@ -1,5 +1,7 @@
 package com.ford.asukathunder.controller.user;
 
+import com.ford.asukathunder.common.config.PageResult;
+import com.ford.asukathunder.common.config.Response;
 import com.ford.asukathunder.common.encrypt.anno.Encrypt;
 import com.ford.asukathunder.common.entity.user.User;
 import com.ford.asukathunder.common.exception.InvalidRequestException;
@@ -55,6 +57,18 @@ public class UserController {
             PageUserDTO result = new PageUserDTO().convertFrom(user);
             return result;
         });
+    }
+
+    @Encrypt
+    @ApiOperation(value = "查询")
+    @GetMapping(value = "/v1/users/query")
+    public Response query(@RequestParam(value = "nickName", required = false) String nickName,
+                          @RequestParam(value = "account", required = false) String account,
+                          @RequestParam(value = "roleId", required = false) String roleId,
+                          @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                          @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+        PageResult<PageUserDTO> pageResult = userService.query(nickName, account, roleId, page, size);
+        return Response.success(pageResult);
     }
 
     /**

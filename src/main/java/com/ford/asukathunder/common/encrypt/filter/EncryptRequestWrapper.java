@@ -77,7 +77,7 @@ public class EncryptRequestWrapper extends HttpServletRequestWrapper {
     @Override
     public ServletInputStream getInputStream() throws IOException {
         String content = IOUtils.toString(this.body, charset);
-        // JSON 数据格式的不进行解密操作
+        // JSONFormat 数据格式的不进行解密操作
         String decryptBody = "";
         if (content.startsWith("{")) {
             decryptBody = content;

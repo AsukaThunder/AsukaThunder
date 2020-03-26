@@ -1,22 +1,30 @@
 package com.ford.asukathunder.service.impl;
 
+import com.ford.asukathunder.common.config.PageResult;
 import com.ford.asukathunder.common.entity.role.UserRoleRef;
 import com.ford.asukathunder.common.entity.user.User;
+import com.ford.asukathunder.common.util.BeanCopierUtil;
 import com.ford.asukathunder.common.util.UserUtils;
+import com.ford.asukathunder.controller.user.dto.PageUserDTO;
 import com.ford.asukathunder.repository.UserRepository;
 import com.ford.asukathunder.service.PermissionService;
 import com.ford.asukathunder.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: UserServiceImpl
@@ -31,6 +39,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Resource
     private PermissionService permissionService;
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Override
     public User queryByAccountAndPassword(String account, String password) {
@@ -76,6 +86,62 @@ public class UserServiceImpl implements UserService {
         };
 
         return userRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public PageResult<PageUserDTO> query(String nickName, String account, String roleId, Integer page, Integer size) {
+        //新建排序、分页
+        Pageable  pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createTime");
+        //实现接口方法specification，添加条件
+        Specification<User> spec = (root, criteriaQuery, criteriaBuilder) -> {
+            //混合条件查询
+            Predicate predicate = criteriaBuilder.conjunction();
+            if (StringUtils.isNotEmpty(nickName)) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("nickname").as(String.class), "%" + nickName + "%"));
+            }
+            if (StringUtils.isNotEmpty(account)) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("account").as(String.class), "%" + account + "%"));
+            }
+            if (StringUtils.isNotEmpty(roleId)) {
+                //多表关联查询
+                Path<UserRoleRef> userRolePath = root.join("userRoleRef", JoinType.LEFT);
+                //子查询
+                Subquery<String> subQuery = criteriaQuery.subquery(String.class);
+                Root<UserRoleRef> userRoleRoot = subQuery.from(UserRoleRef.class);
+                subQuery.select(userRoleRoot.get("userRoleId"));
+                Predicate subPredicate = criteriaBuilder.conjunction();
+                //拼接查询条件
+                subPredicate = criteriaBuilder.and(subPredicate, criteriaBuilder.equal(userRoleRoot.get("role").get("roleId")
+                        .as(String.class), roleId));
+                subQuery.where(subPredicate);
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.in(userRolePath.get("userRoleId")).value(subQuery));
+            }
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("isDelete").as(Boolean.class), false));
+            criteriaQuery.distinct(true).where(predicate);
+            return criteriaQuery.getRestriction();
+        };
+        //注意：
+        //如果实体类user和DTO字段名不对应，将不会把值正确的赋予，需手动再赋值
+        Page<User> pages = userRepository.findAll(spec, pageable);
+        List<User> userList = pages.getContent();
+        List<PageUserDTO> userDTOList = BeanCopierUtil.cloneObject(userList, PageUserDTO.class);
+        // 科室名称
+        userDTOList.stream()
+                .forEach(userDTO -> userList.stream()
+                        // 主键相等
+                        .filter(user -> userDTO.getUserId().equals(user.getUserId()))
+                        .forEach(user -> {
+                            //昵称
+                            userDTO.setNickName(user.getNickname());
+                            // 角色
+                            userDTO.setRoles(user.getUserRoleRef()
+                                    .stream()
+                                    .filter(ref -> ref.getRole().getEnable())
+                                    .map(ref -> ref.getRole().getRoleName())
+                                    .collect(Collectors.toList()));
+                        })
+                );
+        return new PageResult<>(pages.getTotalElements(), userDTOList);
     }
 
     @Override
